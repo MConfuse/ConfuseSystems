@@ -88,4 +88,16 @@ public class ConfFileWriter {
 		this.fields.addAll(Arrays.asList(fields));
 	}
 
+	/**
+	 * Used to add a {@link ConfFileField} to this {@link ConfFileWriter}s instance.
+	 * Adding {@link ConfFileField}s is necessary to write the data to the file
+	 * later on, using the {@link #writeFile()} method.
+	 * 
+	 * @param fields The {@link ConfFileField} that should be added
+	 */
+	public void addField(ConfFileField field)
+	{
+		this.fields.add(field);
+	}
+
 }

@@ -3,96 +3,60 @@ package de.confuse.confFile;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A class that's usually created by the {@link ConfFileReader} but can also be
+ * A class that's usually created by the {@link ConfFileField} but can also be
  * created manually for special use cases. <br>
- * <br>
- * This method allows for easy data retrieval, after scanning in the values
- * using the constructor, using the {@link #getValue(String)} method. All input
- * values have to follow the .CONFF formatting or else values cannot be
- * retrieved or only partially.
+ * This class represents one specific value and it's key and is completely
+ * unique. An instance of this class cannot be retrieved directly, only the
+ * value associated with it can be retrieved from the {@link ConfFileField} it
+ * was created by, using the {@link ConfFileField#getValue(String)} method.<br>
+ * <strong>Version 1.2 Patch notes:</strong><br>
+ * - Refactored the whole class to fit the changes made to the
+ * {@link ConfResult} and {@link ConfFileField} classes.<br>
+ * Main Changes include:<br>
+ * -- {@link ConfFileField}s are now replacing the {@link ConfResult} using an
+ * overloaded Constructor, all old {@link ConfResult} methods are now included
+ * in the {@link ConfFileField} and only function if they were created using the
+ * old {@link ConfResult} constructor. The {@link ConfResult} class is now an
+ * easy way of storing the keys and values that were previously stored inside a
+ * {@link ConcurrentHashMap}.
  * 
- * @version 1
+ * @version 1.2
  * @author Confuse/Confuse#5117
  *
  */
 public class ConfResult {
 
-	/** Represents the name of this Field */
-	private final String name;
-	/** A HashMap containing all values with their keys */
-	private ConcurrentHashMap<String, String> values = new ConcurrentHashMap<String, String>();
+	/** Represents the name/key of this Field */
+	private final String key;
+	/** Contains the value for this specific {@link #key} */
+	private final String value;
 
 	/**
-	 * Will take the input values in the .CONFF format and put them into a
-	 * {@link ConcurrentHashMap} for easy data retrieval using the
-	 * {@link #getValue(String)} method.
-	 * 
-	 * @param name   The name of this field
-	 * @param values A String in the .CONFF format
+	 * @param key   The key/name for the {@link #value}
+	 * @param value The final value for this {@link #key}
 	 */
-	public ConfResult(String name, String values)
+	public ConfResult(String key, String value)
 	{
-		this.name = name;
-//		System.out.println(name);
-//		System.out.println(values);
-
-		String[] valueArray = values.split(",");
-
-		// If there are more than at least one value it will split them up and add them
-		// to the HashMap
-		if (valueArray.length > 1)
-			for (String string : valueArray)
-			{
-				String key = string.substring(string.indexOf("\"") + 1, string.lastIndexOf("\""));
-				String val = string.substring(string.lastIndexOf("\"") + 1);
-//				System.out.println(key + " == " + val);
-
-				this.values.put(key, val);
-			}
-		else if (!values.equals("")) // Only one value
-		{
-			String key = values.substring(values.indexOf("\"") + 1, values.lastIndexOf("\""));
-			String val = values.substring(values.lastIndexOf("\"") + 1);
-//			System.out.println(key + " == " + val);
-
-			this.values.put(key, val);
-		}
-		else // no value
-			;
-
+		this.key = key;
+		this.value = value;
 	}
 
 	/**
-	 * Returns a value using the values key. This method is case sensitive!
-	 * 
-	 * @param key Key (name) of the value
-	 * @return String containing the value | Null
+	 * @return a formatted version of the {@link #key} and {@link #value}
 	 */
-	public String getValue(String key)
+	public String getFormattedField()
 	{
-		String res = this.values.get(key);
-
-		if (res != null)
-		{
-			return res;
-		}
-		else
-			return null;
+		return "\"" + key + "\"" + value;
 	}
 
-	public ConcurrentHashMap<String, String> getValues()
+	public String getKey()
 	{
-		return values;
+		return key;
 	}
 
-	public void setValues(ConcurrentHashMap<String, String> values)
+	public String getValue()
 	{
-		this.values = values;
-	}
-
-	public String getName()
-	{
-		return name;
+		return value;
 	}
 
 }

@@ -1,0 +1,14 @@
+# comment -> for input values insert a '\' infront of everyone of the following characters: {}[],"
+# forbidden characters: \
+test
+{
+	val1: "\"hiyaa\""
+	val2["1", "2", "3", "4"]
+}
+anotherOne
+{
+	tree: "oak"
+	cookies["chocolate", "\"unusual\", cookie"]
+}
+
+oldOne{"fuckme"rightHere,"value"val};

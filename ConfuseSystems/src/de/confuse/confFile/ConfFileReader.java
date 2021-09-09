@@ -3,6 +3,7 @@ package de.confuse.confFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -98,7 +99,7 @@ public class ConfFileReader {
 	 *                   the {@link #setFileVersion(double)} or there was an error
 	 *                   with the specified {@link File}
 	 */
-	public ConfFileReader(File file) throws Exception
+	public ConfFileReader(File file) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		boolean isHeader = true;
@@ -135,10 +136,10 @@ public class ConfFileReader {
 	 * 
 	 * @param paramContent The String that contains the ConfField/s.
 	 */
-	private void readContent(String paramContent) throws Exception
+	private void readContent(String paramContent) throws IOException
 	{
 		if (FILE_VERSION == -1D)
-			throw new Exception("File Version was not specified!");
+			throw new IOException("File Version was not specified!");
 
 		if (FILE_VERSION < 2)
 		{
@@ -174,6 +175,15 @@ public class ConfFileReader {
 		return null;
 	}
 
+	public List<ConfFileField> getResult()
+	{
+		return result;
+	}
+	
+	public List<ConfFileField> getFields()
+	{
+		return result;
+	}
 
 	public double getFileVersion()
 	{

@@ -26,7 +26,10 @@ public abstract class Command {
 	public Command(String name, String[] alias, String syntax, String arguments, String descriptor)
 	{
 		this.name = name;
-		this.alias = alias;
+		if (alias == null)
+			this.alias = new String[0];
+		else
+			this.alias = alias;
 		this.syntax = syntax;
 		this.arguments = arguments;
 		this.descriptor = descriptor;

@@ -1,4 +1,4 @@
-package de.confuse.confFile;
+package de.confuse.confFileV1;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ConfFileWriter {
 
 	/** The Version of the ConfFileWriter */
-	public static String VERSION = "ConfFileVersion: 1.1 | Created by Confuse/Confuse#5117 | Note: At some point this formatting might not be supported anymore by the File reader";
+	public static final String VERSION = "ConfFileVersion: 1.1 | Created by Confuse/Confuse#5117 | Note: At some point this formatting might not be supported anymore by the File reader";
 
 	/** The target file which the System will use to save the data in */
 	private File file;

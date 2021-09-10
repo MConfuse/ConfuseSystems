@@ -2,13 +2,13 @@
 # forbidden characters: \
 test
 {
-	val1: "\"hiyaa\""
+	val1: "\"hiyaa\"" # Comment
 	val2 ["1", "2", "3", "4"]
 }
 anotherOne
 {
-	tree: "oak"
-	cookies ["chocolate", "\"unusual\", cookie"]
+	tree: "oak \"baum\""
+	cookies ["chocolate", "\"unusual\", cookie", "gummy"]
 }
 
 oldOne{"fuckme"rightHere,"value"val};

@@ -1,4 +1,4 @@
-package de.confuse.confFile;
+package de.confuse.confFileV1;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -156,8 +156,10 @@ public class ConfFileReader {
 						string.substring(string.indexOf("{") + 1, string.lastIndexOf("}"))));
 			}
 
+			return;
 		}
 
+		throw new IOException("Unsupported Version! This reader only supports versions 0.1 to 1.9! Input Version: " + FILE_VERSION);
 	}
 
 	/**

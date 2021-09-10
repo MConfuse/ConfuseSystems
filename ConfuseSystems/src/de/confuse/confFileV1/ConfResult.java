@@ -1,4 +1,4 @@
-package de.confuse.confFile;
+package de.confuse.confFileV1;
 
 import java.util.concurrent.ConcurrentHashMap;
 

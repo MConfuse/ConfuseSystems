@@ -3,12 +3,12 @@
 test
 {
 	val1: "\"hiyaa\""
-	val2["1", "2", "3", "4"]
+	val2 ["1", "2", "3", "4"]
 }
 anotherOne
 {
 	tree: "oak"
-	cookies["chocolate", "\"unusual\", cookie"]
+	cookies ["chocolate", "\"unusual\", cookie"]
 }
 
 oldOne{"fuckme"rightHere,"value"val};

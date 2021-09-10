@@ -23,7 +23,8 @@ public class MainTest {
 
 	public static void main(String[] args)
 	{
-		String pathname = "test.conff";
+//		String pathname = "test.conff";
+		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
 		File file = new File(pathname);
 		try
 		{
@@ -85,6 +86,15 @@ public class MainTest {
 						}
 
 						System.out.println(name + " | " + values[0] + " | " + comment);
+					}
+					else if (!(name = temp.split(" ")[0]).endsWith(":"))
+					{
+						System.out.println("Array!");
+						String arrayStr = "";
+						int start = findFirstMatchingPosition(temp, 'a', '[') + 1;
+						int end = findFirstMatchingPosition(temp.substring(start + 1), '\'', ']');
+						System.out.println(temp.substring(start));
+						System.out.println(start + " | " + end);
 					}
 
 				}

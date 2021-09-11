@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import de.confuse.confFileV1.ConfFileField;
-import de.confuse.confFileV1.ConfFileReader;
-import de.confuse.confFileV1.ConfFileWriter;
 import de.confuse.confFileV2.ConfFileReaderV2;
+import de.confuse.confFileV2.ConfFileWriterV2;
 import de.confuse.util.ArrayUtils;
 import de.confuse.version.Version;
 import static de.confuse.util.ArrayUtils.*;
@@ -32,6 +31,10 @@ public class MainTest
 		try
 		{
 			ConfFileReaderV2 reader = new ConfFileReaderV2(file);
+
+			ConfFileWriterV2 writer = new ConfFileWriterV2(new File("testWrite.conff"));
+			writer.addFields(reader.getFields());
+			writer.writeFile();
 		}
 		catch (IOException e)
 		{

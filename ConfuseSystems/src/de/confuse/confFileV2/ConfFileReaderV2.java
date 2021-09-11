@@ -91,13 +91,12 @@ public class ConfFileReaderV2
 					}
 
 					field.put(name, comment, values);
-					System.out.println(name + " | " + values[0] + " | " + comment);
+//					System.out.println(name + " | " + values[0] + " | " + comment);
 				}
 				else if (!(name = temp.split(" ")[0]).endsWith(":"))
 				/* Array value, format: 'Name ["test", "test with \"another test\" here"] */
 				{
-					System.out.println("Array!");
-					name = name.substring(0, name.length() - 1); // removing the : from the back
+//					System.out.println("Array!");
 					int arrStart = findFirstMatchingPosition(temp, 'a', '[');
 					int arrEnd = findFirstMatchingPosition(temp.substring(arrStart + 1), '\\', ']') + arrStart;
 					String arrStr = temp.substring(arrStart, arrEnd);
@@ -106,8 +105,10 @@ public class ConfFileReaderV2
 					int totalQuotations = arrStr.split("\"").length;
 					int ignoredQuotations = amountOfMatches(arrStr, "\\\"");
 					int offset = 0;
+					int valStart = 0;
+					int valEnd = 0;
 
-					System.out.println(arrStr + " | " + totalQuotations + " | " + ignoredQuotations);
+//					System.out.println(arrStr + " | " + totalQuotations + " | " + ignoredQuotations);
 					// loops through the total amount of quotation marks, (total - ignored) / 2 ->
 					// "value" -> 2 per value
 					for (int i = 0; i < (totalQuotations - ignoredQuotations) / 2; i++)
@@ -116,16 +117,22 @@ public class ConfFileReaderV2
 						 * finding the first and last index of the value using
 						 * '"' and ignoring every '\"'
 						 */
-						int valStart = findFirstMatchingPosition(arrStr, '\\', '"', offset);
-						int valEnd = findFirstMatchingPosition(arrStr, '\\', '"', offset + 1) - 1;
+						valStart = findFirstMatchingPosition(arrStr, '\\', '"', offset);
+						valEnd = findFirstMatchingPosition(arrStr, '\\', '"', offset + 1) - 1;
 						offset += 2;
 
+						String value = ConfFileValueV2.replaceIgnoreMarkers(arrStr.substring(valStart, valEnd));
 						// Adding the found value into the array
-						values = addElementToArray(values, arrStr.substring(valStart, valEnd));
+						values = addElementToArray(values, value);
 					}
 
+					// Comment
+					int totalLength = arrStart + arrStr.length() + ("	".length() * bracketLayer) + 2;
+					if (totalLength < line.length())
+						comment = line.substring(totalLength);
+
 					field.put(name, comment, values);
-					printArray(values);
+//					printArray(values);
 				}
 
 			}
@@ -134,13 +141,15 @@ public class ConfFileReaderV2
 			prevLine = line;
 		}
 
+		reader.close();
+
 		for (ConfFileFieldV2 field : fields)
 		{
-			System.out.println(field.getName() + ": " + Arrays.toString(field.getValues().toArray()));
+//			System.out.println(field.getName() + ": " + Arrays.toString(field.getValues().toArray()));
 		}
 
-		ConfFileFieldV2 field = getField("test");
-		System.out.println("Value: " + field.getValueRaw("val1").getComment());
+//		ConfFileFieldV2 field = getField("test");
+//		System.out.println("Value: " + field.getValueRaw("val1").getComment());
 	}
 
 	/**
@@ -159,5 +168,8 @@ public class ConfFileReaderV2
 
 		return null;
 	}
+
+	public List<ConfFileFieldV2> getFields()
+	{ return this.fields; }
 
 }

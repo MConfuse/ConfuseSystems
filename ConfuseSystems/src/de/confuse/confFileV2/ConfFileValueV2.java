@@ -4,6 +4,13 @@ import java.util.Arrays;
 
 public class ConfFileValueV2
 {
+	/**
+	 * Contains all of the characters where the system inserts/replaces the \ before
+	 * the character.
+	 */
+	public static final char[] SPECIAL_CHARACTERS =
+	{ '{', '}', '[', ']', '"' };
+
 	/** The "name" of the value. Used to retrieve it from a field. */
 	private final String key;
 	/** All values that this instance stores. */
@@ -21,19 +28,20 @@ public class ConfFileValueV2
 	 * Once created the values cannot be changed anymore, so make sure to put in the
 	 * final values into the constructor!
 	 * 
-	 * @param key    The key of this Value, used to retrieve it back out from a
-	 *               file.
+	 * @param key     The key of this Value, used to retrieve it back out from a
+	 *                file.
 	 * @param comment The comment attached to this value.
-	 * @param values The actual values of this {@link ConfFileValueV2}.
+	 * @param values  The actual values of this {@link ConfFileValueV2}.
 	 */
 	public ConfFileValueV2(final String key, final String comment, final String... values)
 	{
 		this.key = key;
-		this.values = values;
-		if (comment == null)
-			this.comment = "";
+		if (values == null)
+			this.values = new String[]
+			{ "" };
 		else
-			this.comment = comment;
+			this.values = values;
+		this.comment = comment;
 	}
 
 	@Override
@@ -43,14 +51,14 @@ public class ConfFileValueV2
 	 */
 	public String toString()
 	{
-		return key + ": " + Arrays.toString(values);
+		return this.key + ": " + Arrays.toString(this.values);
 	}
 
 	/**
 	 * @return the key
 	 */
 	public String getKey()
-	{ return key; }
+	{ return this.key; }
 
 	/**
 	 * @return the whole {@link #values} array. If {@link #isArrayValue()} returns
@@ -77,18 +85,14 @@ public class ConfFileValueV2
 	public String getFormattedValue()
 	{
 		if (!isArrayValue())
-		{
-			return key + ": " + getValue();
-		}
-		else
-		{
-			StringBuilder builder = new StringBuilder();
-			for (int i = 0; i < this.values.length; i++)
-				builder.append("\"" + this.values[i] + "\", ");
+			return this.key + ": \"" + getValue() + "\"" + (hasComment() ? " " + this.comment : "");
 
-			return key + " [" + builder.toString().substring(0, builder.toString().length() - 2) + "]";
-		}
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < this.values.length; i++)
+			builder.append("\"" + (insertIgnoreMarkers(this.values[i])) + "\", ");
 
+		return this.key + " [" + builder.toString().substring(0, builder.toString().length() - 2) + "]"
+				+ (hasComment() ? this.comment : "");
 	}
 
 	/**
@@ -103,13 +107,36 @@ public class ConfFileValueV2
 	 *         to it.
 	 */
 	public boolean isArrayValue()
-	{ return values.length > 1; }
+	{ return this.values.length > 1; }
+
+	public boolean hasComment()
+	{
+		return this.comment != null;
+	}
 
 	/**
 	 * @return the comment. Note: Retains the # in front of the comment, if that is
 	 *         a problem you will have to remove it manually.
 	 */
 	public String getComment()
-	{ return comment; }
+	{ return this.comment; }
+
+	public static String replaceIgnoreMarkers(String in)
+	{
+		String out = in;
+		for (char c : SPECIAL_CHARACTERS)
+			out = in.replace("\\" + String.valueOf(c), String.valueOf(c));
+
+		return out;
+	}
+
+	public static String insertIgnoreMarkers(String in)
+	{
+		String out = in;
+		for (char c : SPECIAL_CHARACTERS)
+			out = in.replace(String.valueOf(c), "\\" + String.valueOf(c));
+
+		return out;
+	}
 
 }

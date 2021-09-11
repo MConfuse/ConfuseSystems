@@ -28,7 +28,7 @@ public class ConfFileFieldV2
 	 * access or just using {@link #getValues()} and iterating over all of the
 	 * {@link #values}.
 	 * 
-	 * @param name The name of this Field
+	 * @param name   The name of this Field
 	 * @param values A nullable {@link List} of {@link ConfFileValueV2}s
 	 */
 	public ConfFileFieldV2(final String name, List<ConfFileValueV2> values)
@@ -123,12 +123,13 @@ public class ConfFileFieldV2
 	 * Adds the given {@link ConfFileValueV2} to the {@link #values} list.
 	 * 
 	 * @param val The {@link ConfFileValueV2} to add.
-	 * @see #put(String, String, String...)
+	 * @see #put(String, CharSequence, String...)
 	 * @see #put(String, String...)
 	 */
-	public void put(ConfFileValueV2 val)
+	public ConfFileFieldV2 put(ConfFileValueV2 val)
 	{
 		this.values.add(val);
+		return this;
 	}
 
 	/**
@@ -138,11 +139,11 @@ public class ConfFileFieldV2
 	 * @param key    The key (name) to search for.
 	 * @param values The Values to add to the {@link ConfFileValueV2} field.
 	 * @see #put(ConfFileValueV2)
-	 * @see #put(String, String, String...)
+	 * @see #put(String, CharSequence, String...)
 	 */
-	public void put(String key, String... values)
+	public ConfFileFieldV2 put(String key, String... values)
 	{
-		put(new ConfFileValueV2(key, null, values));
+		return put(new ConfFileValueV2(key, null, values));
 	}
 
 	/**
@@ -155,9 +156,9 @@ public class ConfFileFieldV2
 	 * @see #put(ConfFileValueV2)
 	 * @see #put(String, String...)
 	 */
-	public void put(String key, String comment, String... values)
+	public ConfFileFieldV2 put(String key, CharSequence comment, String... values)
 	{
-		put(new ConfFileValueV2(key, comment, values));
+		return put(new ConfFileValueV2(key, String.valueOf(comment), values));
 	}
 
 	/**

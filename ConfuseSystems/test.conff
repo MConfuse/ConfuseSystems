@@ -3,12 +3,12 @@
 test
 {
 	val1: "\"hiyaa\"" # Comment
-	val2 ["1", "2", "3", "4"]
+	val2 ["1", "2", "3", "4"] # Test
 }
 anotherOne
 {
-	tree: "oak \"baum\""
-	cookies ["chocolate", "\"unusual\", cookie", "gummy"]
+	tree: "oak \"baum\"" # Test
+	cookies ["chocolate", "\"unusual\", cookie", "gummy"] # Test
 }
 
 oldOne{"fuckme"rightHere,"value"val};

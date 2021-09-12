@@ -8,8 +8,10 @@ public class ConfFileValueV2
 	 * Contains all of the characters where the system inserts/replaces the \ before
 	 * the character.
 	 */
-	public static final char[] SPECIAL_CHARACTERS =
-	{ '{', '}', '[', ']', '"' };
+	public static final String[] SPECIAL_CHARACTERS =
+	{ "{", "}", "[", "]", "\"" };
+//	public static final char[] SPECIAL_CHARACTERS =
+//		{ '{', '}', '[', ']', '"' };
 
 	/** The "name" of the value. Used to retrieve it from a field. */
 	private final String key;
@@ -42,6 +44,9 @@ public class ConfFileValueV2
 		else
 			this.values = values;
 		this.comment = comment;
+
+		for (int i = 0; i < this.values.length; i++)
+			this.values[i] = replaceEscapeMarkers(this.values[i]);
 	}
 
 	@Override
@@ -84,12 +89,13 @@ public class ConfFileValueV2
 	 */
 	public String getFormattedValue()
 	{
+		System.out.println(key + ": " + isArrayValue());
 		if (!isArrayValue())
-			return this.key + ": \"" + getValue() + "\"" + (hasComment() ? " " + this.comment : "");
+			return this.key + ": \"" + (insertEscapeMarkers(getValue())) + "\"" + (hasComment() ? " " + this.comment : "");
 
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < this.values.length; i++)
-			builder.append("\"" + (insertIgnoreMarkers(this.values[i])) + "\", ");
+			builder.append("\"" + (insertEscapeMarkers(this.values[i])) + "\", ");
 
 		return this.key + " [" + builder.toString().substring(0, builder.toString().length() - 2) + "]"
 				+ (hasComment() ? this.comment : "");
@@ -111,7 +117,7 @@ public class ConfFileValueV2
 
 	public boolean hasComment()
 	{
-		return this.comment != null;
+		return this.comment != null && !this.comment.equals("null");
 	}
 
 	/**
@@ -121,21 +127,23 @@ public class ConfFileValueV2
 	public String getComment()
 	{ return this.comment; }
 
-	public static String replaceIgnoreMarkers(String in)
+	public static String replaceEscapeMarkers(String in)
 	{
 		String out = in;
-		for (char c : SPECIAL_CHARACTERS)
+		for (String c : SPECIAL_CHARACTERS)
 			out = in.replace("\\" + String.valueOf(c), String.valueOf(c));
 
 		return out;
 	}
 
-	public static String insertIgnoreMarkers(String in)
+	public static String insertEscapeMarkers(String in)
 	{
 		String out = in;
-		for (char c : SPECIAL_CHARACTERS)
+		for (String c : SPECIAL_CHARACTERS)
 			out = in.replace(String.valueOf(c), "\\" + String.valueOf(c));
 
+//		out = in.replace("[", "\\[");
+		System.out.println(in + " | " + out + " || " + in.contains("["));
 		return out;
 	}
 

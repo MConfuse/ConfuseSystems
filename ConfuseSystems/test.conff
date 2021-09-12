@@ -4,11 +4,26 @@ test
 {
 	val1: "\"hiyaa\"" # Comment
 	val2 ["1", "2", "3", "4"] # Test
+	Field: test
+	{
+		testVal: "yayeet!"
+		Field: nestingTest
+		{
+			nesting: "[Success!]"
+		}
+
+	}
+
+	Field: test2
+	{
+		fu: "lmao"
+	}
+
 }
 anotherOne
 {
 	tree: "oak \"baum\"" # Test
-	cookies ["chocolate", "\"unusual\", cookie", "gummy"] # Test
+	cookies ["chocolate", "\"unusual\", \[cookie\]", "gummy\]"] # Test
 }
 
 oldOne{"fuckme"rightHere,"value"val};

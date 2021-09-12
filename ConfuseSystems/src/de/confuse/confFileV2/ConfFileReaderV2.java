@@ -42,8 +42,9 @@ public class ConfFileReaderV2
 
 		while ((line = reader.readLine()) != null)
 		{
-			if (line.trim().startsWith("#"))
+			if (line.trim().startsWith("#") || line.trim().isEmpty())
 				continue;
+			System.out.println(" # " + line);
 			/*
 			 * Bracket layering logic, every line that starts with { or } is either
 			 * increasing or decreasing the bracketLayer.
@@ -57,7 +58,11 @@ public class ConfFileReaderV2
 			else if (line.trim().startsWith("}"))
 			{
 				bracketLayer--;
-				fields.add((ConfFileFieldV2) layers[layers.length - 1]);
+				if (bracketLayer >= 0) // Adding the nested field into the the field before
+					((ConfFileFieldV2) layers[bracketLayer]).put((ConfFileFieldV2) layers[bracketLayer + 1]);
+				else
+					fields.add((ConfFileFieldV2) layers[layers.length - 1]);
+
 				layers = removeElementFromArray(layers, layers[layers.length - 1]);
 				continue;
 			}
@@ -72,8 +77,14 @@ public class ConfFileReaderV2
 				String comment = null; // null able
 				String[] values = new String[0]; // default only one slot
 
+				/* Adding a new Field within the current field. */
+				if (temp.startsWith("Field:"))
+				{
+					prevLine = temp.substring("Field: ".length());
+					continue;
+				}
 				/* Normal value, format: 'Name: "Value"' */
-				if ((name = temp.split(" ")[0]).endsWith(":"))
+				else if ((name = temp.split(" ")[0]).endsWith(":"))
 				{
 					name = name.substring(0, name.length() - 1); // removing the : from the back
 					// finds the first non marked quotation mark
@@ -121,7 +132,7 @@ public class ConfFileReaderV2
 						valEnd = findFirstMatchingPosition(arrStr, '\\', '"', offset + 1) - 1;
 						offset += 2;
 
-						String value = ConfFileValueV2.replaceIgnoreMarkers(arrStr.substring(valStart, valEnd));
+						String value = ConfFileValueV2.replaceEscapeMarkers(arrStr.substring(valStart, valEnd));
 						// Adding the found value into the array
 						values = addElementToArray(values, value);
 					}
@@ -148,8 +159,9 @@ public class ConfFileReaderV2
 //			System.out.println(field.getName() + ": " + Arrays.toString(field.getValues().toArray()));
 		}
 
-//		ConfFileFieldV2 field = getField("test");
-//		System.out.println("Value: " + field.getValueRaw("val1").getComment());
+		ConfFileFieldV2 field = getField("test");
+		ConfFileFieldV2 nested2 = field.getField("test").getField("nestingTest");
+		System.out.println(nested2.getValue("nesting"));
 	}
 
 	/**

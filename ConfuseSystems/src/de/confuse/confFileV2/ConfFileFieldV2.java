@@ -15,6 +15,10 @@ public class ConfFileFieldV2
 	 * Contains all {@link ConfFileValueV2}s that are currently available.
 	 */
 	private final List<ConfFileValueV2> values;
+	/**
+	 * Contains all {@link ConfFileFieldV2}s that are currently added.
+	 */
+	private final List<ConfFileFieldV2> fields;
 
 	/**
 	 * The {@link ConfFileFieldV2} is one of the base elements of the whole
@@ -31,13 +35,25 @@ public class ConfFileFieldV2
 	 * @param name   The name of this Field
 	 * @param values A nullable {@link List} of {@link ConfFileValueV2}s
 	 */
-	public ConfFileFieldV2(final String name, List<ConfFileValueV2> values)
+	public ConfFileFieldV2(final String name, List<ConfFileValueV2> values, List<ConfFileFieldV2> fields)
 	{
-		this.name = name;
+		// - Name -
+		if (name.equals("{"))
+			this.name = "";
+		else
+			this.name = name;
+
+		// - Values -
 		if (values != null)
 			this.values = values;
 		else
 			this.values = new ArrayList<ConfFileValueV2>();
+
+		// - Fields -
+		if (fields != null)
+			this.fields = fields;
+		else
+			this.fields = new ArrayList<ConfFileFieldV2>();
 	}
 
 	/**
@@ -61,7 +77,7 @@ public class ConfFileFieldV2
 	 */
 	public ConfFileFieldV2(String name)
 	{
-		this(name, null);
+		this(name, null, null);
 	}
 
 	/**
@@ -119,10 +135,20 @@ public class ConfFileFieldV2
 		return null;
 	}
 
+	public ConfFileFieldV2 getField(String name)
+	{
+		for (ConfFileFieldV2 field : this.fields)
+			if (field.getName().equals(name))
+				return field;
+
+		return null;
+	}
+
 	/**
 	 * Adds the given {@link ConfFileValueV2} to the {@link #values} list.
 	 * 
 	 * @param val The {@link ConfFileValueV2} to add.
+	 * @return This objects instance for chaining.
 	 * @see #put(String, CharSequence, String...)
 	 * @see #put(String, String...)
 	 */
@@ -138,6 +164,7 @@ public class ConfFileFieldV2
 	 * 
 	 * @param key    The key (name) to search for.
 	 * @param values The Values to add to the {@link ConfFileValueV2} field.
+	 * @return This objects instance for chaining.
 	 * @see #put(ConfFileValueV2)
 	 * @see #put(String, CharSequence, String...)
 	 */
@@ -153,12 +180,67 @@ public class ConfFileFieldV2
 	 * @param key     The key (name) to search for.
 	 * @param comment The comment that should be attached to the end of the line.
 	 * @param values  The Values to add to the {@link ConfFileValueV2} field.
+	 * @return This objects instance for chaining.
 	 * @see #put(ConfFileValueV2)
 	 * @see #put(String, String...)
 	 */
 	public ConfFileFieldV2 put(String key, CharSequence comment, String... values)
 	{
 		return put(new ConfFileValueV2(key, String.valueOf(comment), values));
+	}
+
+	/**
+	 * FIXME: Test this all out
+	 * 
+	 * @param field
+	 * @return This objects instance for chaining.
+	 */
+	public ConfFileFieldV2 put(final ConfFileFieldV2 field)
+	{
+		this.fields.add(field);
+		return this;
+	}
+
+	public String getFormattedFieldV2(int layer)
+	{
+		StringBuilder builder = new StringBuilder();
+		String tab = "";
+		for (int i = 0; i < layer; i++)
+			tab += "\t";
+
+		/*
+		 * Checks if this is the first layer for special formatting to save a bit of
+		 * space.
+		 */
+		if (layer != 0)
+			builder.append("\r" + tab + "Field: " + name + "\r" + tab + "{\r");
+		else
+			builder.append(tab + "Field: " + name + "\r" + tab + "{\r");
+
+		// - Adds one tab to indent the following content -
+		tab += "\t";
+
+		// - Adds all of the fields values -
+		for (int i = 0; i < this.values.size(); i++)
+			if (i != this.values.size() - 1)
+				builder.append(tab + this.values.get(i).getFormattedValue() + "\r");
+			else
+				builder.append(tab + this.values.get(i).getFormattedValue());
+
+		// -- Calls the other fields and appends their stuff to this builder --
+		for (ConfFileFieldV2 field : this.fields)
+			builder.append(field.getFormattedFieldV2(layer + 1));
+
+		// - Removes one tab to close the bracket -
+		tab = tab.substring(0, tab.length() - 1);
+		/*
+		 * Checks if this is the first layer for space saving formatting.
+		 */
+		if (layer != 0)
+			builder.append(tab + "\r" + tab + "}\r");
+		else
+			builder.append("\r" + tab + "}");
+		return builder.toString();
 	}
 
 	/**
@@ -172,5 +254,11 @@ public class ConfFileFieldV2
 	 */
 	public List<ConfFileValueV2> getValues()
 	{ return values; }
+
+	/**
+	 * @return all of the fields
+	 */
+	public List<ConfFileFieldV2> getFields()
+	{ return fields; }
 
 }

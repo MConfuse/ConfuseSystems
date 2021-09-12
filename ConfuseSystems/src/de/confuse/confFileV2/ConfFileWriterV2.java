@@ -67,15 +67,17 @@ public class ConfFileWriterV2
 
 		for (ConfFileFieldV2 field : fields)
 		{
+			writer.println(field.getFormattedFieldV2(bracketLayer));
+
 			// name + new line + brace
-			writer.println(field.getName() + "\r{");
-
-			for (ConfFileValueV2 value : field.getValues())
-			{
-				writer.println(indent + value.getFormattedValue());
-			}
-
-			writer.println("}");
+//			writer.println(field.getName() + "\r{");
+//
+//			for (ConfFileValueV2 value : field.getValues())
+//			{
+//				writer.println(indent + value.getFormattedValue());
+//			}
+//
+//			writer.println("}");
 		}
 
 		writer.close();

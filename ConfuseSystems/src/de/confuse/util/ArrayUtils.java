@@ -54,7 +54,7 @@ public class ArrayUtils
 		for (int i = 0; i < arr.length; i++)
 			newArr[i] = arr[i];
 		newArr[arr.length] = element;
-		
+
 		return newArr;
 	}
 
@@ -73,7 +73,7 @@ public class ArrayUtils
 		for (int i = 0; i < arr.length; i++)
 			newArr[i] = arr[i];
 		newArr[arr.length] = element;
-		
+
 		return newArr;
 	}
 
@@ -111,7 +111,7 @@ public class ArrayUtils
 		for (boolean str : arr)
 			if (str == val)
 				return true;
-		
+
 		return false;
 	}
 
@@ -673,6 +673,14 @@ public class ArrayUtils
 		return output = addElementToArray(output, builder.toString());
 	}
 
+	public static Object[] swapValues(Object[] arr, int posA, int posB)
+	{
+		Object temp = arr[posA];
+		arr[posA] = arr[posB];
+		arr[posB] = temp;
+		return arr;
+	}
+
 	public static String toString(Object[] arr)
 	{
 		return Arrays.toString(arr);
@@ -716,14 +724,6 @@ public class ArrayUtils
 	public static String toString(short[] arr)
 	{
 		return Arrays.toString(arr);
-	}
-
-	public static Object[] swapValues(Object[] arr, int posA, int posB)
-	{
-		Object temp = arr[posA];
-		arr[posA] = arr[posB];
-		arr[posB] = temp;
-		return arr;
 	}
 
 }

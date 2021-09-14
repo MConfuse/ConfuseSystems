@@ -1,10 +1,7 @@
 package de.confuse.confFileV2;
 
-import static de.confuse.util.ArrayUtils.addElementToArray;
-import static de.confuse.util.ArrayUtils.printArray;
-import static de.confuse.util.ArrayUtils.removeElementFromArray;
-import static de.confuse.util.StringUtils.amountOfMatches;
-import static de.confuse.util.StringUtils.findFirstMatchingPosition;
+import static de.confuse.util.ArrayUtils.*;
+import static de.confuse.util.StringUtils.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class ConfFileReaderV2
@@ -35,9 +31,6 @@ public class ConfFileReaderV2
 		/*
 		 * Represents the layer of bracket the program is currently in, -1 =
 		 * none/default.
-		 * 
-		 * TODO: Currently only the first bracket layer works properly, recursion is not
-		 * my strong suite yet, lOl!
 		 */
 		int bracketLayer = -1;
 
@@ -45,7 +38,7 @@ public class ConfFileReaderV2
 		{
 			if (line.trim().startsWith("#") || line.trim().isEmpty())
 				continue;
-			System.out.println(" # " + line);
+//			System.out.println(" # " + line);
 
 			int braceOpen = findFirstMatchingPosition(line, '\\', '{');
 			int braceClose = findFirstMatchingPosition(line, '\\', '}');
@@ -64,22 +57,13 @@ public class ConfFileReaderV2
 
 				//
 
-				String fieldName;
-				if (line.startsWith("Field:"))
-					fieldName = line.substring(0, nameEnd);
-				else
-					fieldName = line.substring(0, braceOpen - 1);
-				ConfFileFieldV2 field = new ConfFileFieldV2(fieldName, true);
-//				System.out.println(name);
+				String fieldName = extractFieldName(line.substring(0, braceOpen - 1));
+				ConfFileFieldV2 field = new ConfFileFieldV2(fieldName.trim(), true);
 
 				String temp = line.trim();
-
 				int totalBracketsOpen = amountOfMatches(temp, "(");
-//				int totalBracketsOpen = temp.split("\\(").length;
 				int totalBracketsClosed = amountOfMatches(temp, ")");
-//				int totalBracketsClosed = temp.split("\\)").length;
-				int totalValues = 0;
-				int valueOffset = 0; // for each value + 1
+				int totalValues = 0 , valueOffset = 0; // for each value + 1
 				int valueStart = 0, valueEnd = 0;
 
 				/*
@@ -188,7 +172,7 @@ public class ConfFileReaderV2
 			if (line.trim().startsWith("{"))
 			{
 				bracketLayer++;
-				layers = addElementToArray(layers, new ConfFileFieldV2(prevLine, false));
+				layers = addElementToArray(layers, new ConfFileFieldV2(extractFieldName(prevLine), false));
 				continue;
 			}
 			else if (line.trim().startsWith("}"))
@@ -294,14 +278,23 @@ public class ConfFileReaderV2
 
 		reader.close();
 
-		for (ConfFileFieldV2 field : fields)
-		{
+//		for (ConfFileFieldV2 field : fields)
+//		{
 //			System.out.println(field.getName() + ": " + Arrays.toString(field.getValues().toArray()));
-		}
+//		}
 
-		ConfFileFieldV2 field = getField("test");
-		ConfFileFieldV2 nested2 = field.getField("test").getField("nestingTest");
-		System.out.println(nested2.getValue("nesting"));
+//		ConfFileFieldV2 field = getField("test");
+//		ConfFileFieldV2 nested2 = field.getField("test").getField("nestingTest");
+//		System.out.println(nested2.getValue("nesting"));
+
+	}
+
+	private String extractFieldName(String str)
+	{
+		if (str.toLowerCase().startsWith("field:"))
+			return str.substring("field:".length()).trim();
+		else
+			return str;
 	}
 
 	/**

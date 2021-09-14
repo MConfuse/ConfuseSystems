@@ -25,15 +25,15 @@ public class MainTest
 
 	public static void main(String[] args)
 	{
-//		String pathname = "test.conff";
-		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
+		String pathname = "testWrite.conff";
+//		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
 		File file = new File(pathname);
 
 		try
 		{
 			ConfFileReaderV2 reader = new ConfFileReaderV2(file);
 
-			ConfFileWriterV2 writer = new ConfFileWriterV2(new File("testWrite.conff"));
+			ConfFileWriterV2 writer = new ConfFileWriterV2(new File("testWrite2.conff"));
 			writer.addFields(reader.getFields());
 			writer.writeFile();
 		}

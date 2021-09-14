@@ -242,9 +242,9 @@ public class ConfFileFieldV2
 	public String getFormattedFieldV2(int layer)
 	{
 		if (this.inline)
-			return normallyFormattedField(layer);
-		else
 			return inlineFormattedField();
+		else
+			return normallyFormattedField(layer);
 	}
 
 	private String normallyFormattedField(int layer)
@@ -291,7 +291,17 @@ public class ConfFileFieldV2
 
 	private String inlineFormattedField()
 	{
-		return "";
+		StringBuilder builder = new StringBuilder("Field: " + this.name + " {");
+		
+		// - Adds all of the fields values -
+		for (int i = 0; i < this.values.size(); i++)
+			if (i != this.values.size() - 1)
+				builder.append("(" + this.values.get(i).getFormattedValue() + "), ");
+			else
+				builder.append("(" + this.values.get(i).getFormattedValue() + ")");
+
+		builder.append("}");
+		return builder.toString();
 	}
 
 	/**
@@ -314,6 +324,7 @@ public class ConfFileFieldV2
 
 	/**
 	 * @return true if the {@link #inline} field is false, true if otherwise.
+	 * @see #inline
 	 */
 	public boolean isSupportingFields()
 	{ return !inline; }

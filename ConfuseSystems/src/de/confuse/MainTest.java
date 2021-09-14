@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import de.confuse.confFileV1.ConfFileField;
 import de.confuse.confFileV2.ConfFileReaderV2;
+import de.confuse.confFileV2.ConfFileValueV2;
 import de.confuse.confFileV2.ConfFileWriterV2;
 import de.confuse.util.ArrayUtils;
 import de.confuse.version.Version;
@@ -24,8 +25,8 @@ public class MainTest
 
 	public static void main(String[] args)
 	{
-		String pathname = "test.conff";
-//		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
+//		String pathname = "test.conff";
+		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
 		File file = new File(pathname);
 
 		try

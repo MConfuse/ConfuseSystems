@@ -12,6 +12,14 @@ public class ConfFileFieldV2
 	 */
 	private final String name;
 	/**
+	 * If the Field is written in one line instead of the usual "one value per
+	 * line". If this value is true when retrieving the formatted field using
+	 * {@link #getFormattedFieldV2(int)}, usually called by the
+	 * {@link ConfFileWriterV2}, the stored {@link #fields} are not written, as that
+	 * is not supported by the ConfFile system.
+	 */
+	private boolean inline;
+	/**
 	 * Contains all {@link ConfFileValueV2}s that are currently available.
 	 */
 	private final List<ConfFileValueV2> values;
@@ -25,23 +33,33 @@ public class ConfFileFieldV2
 	 * ConfF-System as it contains a {@link List} of {@link ConfFileValueV2}s which
 	 * store the actual data from the {@link File} read by the
 	 * {@link ConfFileReaderV2}.<br>
-	 * This class and, in this case, this Object is a bridge between the raw
-	 * data read from the file and the actual data as the {@link ConfFileReaderV2}
-	 * uses it to split the raw data into usable chunks of data which can the be
-	 * accessed using the access methods like {@link #getValue(String)} for direct
-	 * access or just using {@link #getValues()} and iterating over all of the
-	 * {@link #values}.
+	 * This class and, in this case, this Object is a bridge between the raw data
+	 * read from the file and the actual data as the {@link ConfFileReaderV2} uses
+	 * it to split the raw data into usable chunks of data which can the be accessed
+	 * using the access methods like {@link #getValue(String)} for direct access or
+	 * just using {@link #getValues()} and iterating over all of the
+	 * {@link #values}.<br>
+	 * <br>
+	 * The {@link #inline} boolean is set by the {@link ConfFileReaderV2} according
+	 * to the state the {@link ConfFileFieldV2} was read from the field. You can
+	 * still change the boolean afterwards though.
 	 * 
 	 * @param name   The name of this Field
+	 * @param inline Indicates if this field should be written in a single or
+	 *               multiple lines. Can be changed after the instantiation.
 	 * @param values A nullable {@link List} of {@link ConfFileValueV2}s
+	 * @param fields A nullable {@link List} of {@link ConfFileFieldV2}s
 	 */
-	public ConfFileFieldV2(final String name, List<ConfFileValueV2> values, List<ConfFileFieldV2> fields)
+	public ConfFileFieldV2(final String name, boolean inline, List<ConfFileValueV2> values,
+			List<ConfFileFieldV2> fields)
 	{
 		// - Name -
 		if (name.equals("{"))
 			this.name = "";
 		else
 			this.name = name;
+
+		this.inline = inline;
 
 		// - Values -
 		if (values != null)
@@ -57,27 +75,33 @@ public class ConfFileFieldV2
 	}
 
 	/**
-	 * Instantiates a new {@link ConfFileFieldV2}. This method is the short form of
-	 * {@link #ConfFileFieldV2(String, List)} and fills the List parameter with
-	 * null.<br>
+	 * Instantiates a new {@link ConfFileFieldV2}. This constructor is the short
+	 * form of {@link #ConfFileFieldV2(String, List)} and fills the List parameter
+	 * with null.<br>
 	 * <br>
 	 * The {@link ConfFileFieldV2} is one of the base elements of the whole
 	 * ConfF-System as it contains a {@link List} of {@link ConfFileValueV2}s which
 	 * store the actual data from the {@link File} read by the
 	 * {@link ConfFileReaderV2}.<br>
-	 * This class and, in this case, this Object is a bridge between the raw
-	 * data read from the file and the actual data as the {@link ConfFileReaderV2}
-	 * uses it to split the raw data into usable chunks of data which can the be
-	 * accessed using the access methods like {@link #getValue(String)} for direct
-	 * access or just using {@link #getValues()} and iterating over all of the
-	 * {@link #values}.
+	 * This class and, in this case, this Object is a bridge between the raw data
+	 * read from the file and the actual data as the {@link ConfFileReaderV2} uses
+	 * it to split the raw data into usable chunks of data which can the be accessed
+	 * using the access methods like {@link #getValue(String)} for direct access or
+	 * just using {@link #getValues()} and iterating over all of the
+	 * {@link #values}.<br>
+	 * <br>
+	 * The {@link #inline} boolean is set by the {@link ConfFileReaderV2} according
+	 * to the state the {@link ConfFileFieldV2} was read from the field. You can
+	 * still change the boolean afterwards though.
 	 * 
-	 * @param name The name of this Field
-	 * @see #ConfFileFieldV2(String, List)
+	 * @param name   The name of this Field
+	 * @param inline Indicates if this field should be written in a single or
+	 *               multiple lines. Can be changed after the instantiation.
+	 * @see #ConfFileFieldV2(String, boolean, List, List)
 	 */
-	public ConfFileFieldV2(String name)
+	public ConfFileFieldV2(final String name, boolean inline)
 	{
-		this(name, null, null);
+		this(name, inline, null, null);
 	}
 
 	/**
@@ -201,7 +225,29 @@ public class ConfFileFieldV2
 		return this;
 	}
 
+	/**
+	 * TODO: Add inline tab insertions
+	 * 
+	 * Returns the fully formatted field. This can either be the normal multi line
+	 * or a one line layout.<br>
+	 * The layout is specified by the {@link #inline} boolean, see that description
+	 * for a more detailed behavior.
+	 * 
+	 * @param layer Specifies the indent size in tab spaces. (The name will always
+	 *              have layer - 1 tabs).
+	 * @return The formatted {@link ConfFileFieldV2} that the
+	 *         {@link ConfFileReaderV2} can read.
+	 * @see #inline
+	 */
 	public String getFormattedFieldV2(int layer)
+	{
+		if (this.inline)
+			return normallyFormattedField(layer);
+		else
+			return inlineFormattedField();
+	}
+
+	private String normallyFormattedField(int layer)
 	{
 		StringBuilder builder = new StringBuilder();
 		String tab = "";
@@ -243,11 +289,34 @@ public class ConfFileFieldV2
 		return builder.toString();
 	}
 
+	private String inlineFormattedField()
+	{
+		return "";
+	}
+
 	/**
 	 * @return the {@link ConfFileFieldV2}s name
 	 */
 	public String getName()
 	{ return this.name; }
+
+	/**
+	 * @return true if this field should be written in the inline mode
+	 */
+	public boolean isInline()
+	{ return inline; }
+
+	/**
+	 * @param inline set {@link #inline} state
+	 */
+	public void setInline(boolean inline)
+	{ this.inline = inline; }
+
+	/**
+	 * @return true if the {@link #inline} field is false, true if otherwise.
+	 */
+	public boolean isSupportingFields()
+	{ return !inline; }
 
 	/**
 	 * @return all of the values

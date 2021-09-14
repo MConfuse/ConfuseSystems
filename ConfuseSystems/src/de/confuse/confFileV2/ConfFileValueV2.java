@@ -9,7 +9,7 @@ public class ConfFileValueV2
 	 * the character.
 	 */
 	public static final String[] SPECIAL_CHARACTERS =
-	{ "{", "}", "[", "]", "\"" };
+	{ "{", "}", "[", "]", "(", ")", "\"", "'", ":" };
 //	public static final char[] SPECIAL_CHARACTERS =
 //		{ '{', '}', '[', ']', '"' };
 
@@ -89,7 +89,7 @@ public class ConfFileValueV2
 	 */
 	public String getFormattedValue()
 	{
-		System.out.println(key + ": " + isArrayValue());
+//		System.out.println(key + ": " + isArrayValue());
 		if (!isArrayValue())
 			return this.key + ": \"" + (insertEscapeMarkers(getValue())) + "\"" + (hasComment() ? " " + this.comment : "");
 
@@ -133,6 +133,7 @@ public class ConfFileValueV2
 		for (String c : SPECIAL_CHARACTERS)
 			out = in.replace("\\" + String.valueOf(c), String.valueOf(c));
 
+//		System.out.println("C: " + out.contains("\\["));
 		return out;
 	}
 
@@ -142,8 +143,8 @@ public class ConfFileValueV2
 		for (String c : SPECIAL_CHARACTERS)
 			out = in.replace(String.valueOf(c), "\\" + String.valueOf(c));
 
-//		out = in.replace("[", "\\[");
-		System.out.println(in + " | " + out + " || " + in.contains("["));
+//		out = in.replace("\\", "\\\\");
+//		System.out.println(in + " | " + out + " || " + in.contains("["));
 		return out;
 	}
 

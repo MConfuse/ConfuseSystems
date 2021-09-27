@@ -1,9 +1,9 @@
 # comment -> for input values insert a '\' infront of everyone of the following characters: {}[],"
 # forbidden characters: \
-inline {(inlineNormal: "yikes" # Test), (inlineBetter: "guht"), (inlineBest: "klaus"), (inlineTEST: "YAYEEEEEEEEET"), (inlineArray ["1", "2", "3"] # Test)}
+inline {(inlineNormal: "yikes" # Test), (inlineBetter: "guht"), (inlineBest: "klaus"), (inlineTEST: "YAYEEEEEEEEET"), (inlineArray ["1", "2", "3"] # Test), (StringOne: "This is a handy \"Test\" String which has \[lots\] of \{stuffs\} in it! \(Also, it looks amazing!\).")}
 test
 {
-	val1: "\"hi\\ya\:a\"" # Comment
+	val1: "\"hi\ya:a\"" # Comment
 	val2 ["1", "2", "3", "4"] # Test
 	Field: test
 	{

@@ -88,4 +88,22 @@ public class StringUtils
 		return total;
 	}
 
+	public static int amountOfMatches(String input, char ignore, char val)
+	{
+		char[] in = input.toCharArray();
+		char[] lastChars = new char[] {in[0]};
+		int total = 0;
+
+		for (char c : in)
+			if (lastChars.length > 0 && lastChars[lastChars.length - 1] != ignore && c == val)
+			{
+				lastChars = addElementToArray(lastChars, c);
+				total++;
+			}
+			else
+				lastChars = addElementToArray(lastChars, c);
+
+		return total;
+	}
+
 }

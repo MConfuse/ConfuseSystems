@@ -1,4 +1,4 @@
 ConfFileVersion: 2.0 | Created by Confuse/Confuse#5117 | !Removing this might break stuff! | Note: At some point this formatting might not be supported anymore by the File reader#
-Field: inline {(inlineNormal: "yikes" # Test), (inlineBetter: "guht"), (inlineBest: "klaus"), (inlineTEST: "YAYEEEEEEEEET"), (inlineArray ["1", "2", "3"] # Test)}
-Field: test{	val1: "\"hi\\ya\:a\"" # Comment	val2 ["1", "2", "3", "4"] # Test	Field: test	{		testVal: "yayeet!"		Field: nestingTest		{			nesting: "[Success!]"				}		}	Field: test2	{		fu: "lmao"		}}
+Field: inline {(inlineNormal: "yikes" # Test), (inlineBetter: "guht"), (inlineBest: "klaus"), (inlineTEST: "YAYEEEEEEEEET"), (inlineArray ["1", "2", "3"] # Test), (StringOne: "This is a handy \"Test\" String which has \[lots\] of \{stuffs\} in it! \(Also, it looks amazing!\).")}
+Field: test{	val1: "\"hi\ya:a\"" # Comment	val2 ["1", "2", "3", "4"] # Test	Field: test	{		testVal: "yayeet!"		Field: nestingTest		{			nesting: "\[Success!\]"				}		}	Field: test2	{		fu: "lmao"		}}
 Field: anotherOne{	tree: "oak \"baum\"" # Test	cookies ["chocolate", "\"unusual\", \[cookie\]", "gummy\]"] # Test}

@@ -9,7 +9,7 @@ public class ConfFileValueV2
 	 * the character.
 	 */
 	public static final String[] SPECIAL_CHARACTERS =
-	{ "{", "}", "[", "]", "(", ")", "\"", "'", ":" };
+	{ "{", "}", "[", "]", "(", ")", "\"", "'" };
 //	public static final char[] SPECIAL_CHARACTERS =
 //		{ '{', '}', '[', ']', '"' };
 
@@ -33,20 +33,19 @@ public class ConfFileValueV2
 	 * @param key     The key of this Value, used to retrieve it back out from a
 	 *                file.
 	 * @param comment The comment attached to this value.
-	 * @param values  The actual values of this {@link ConfFileValueV2}.
+	 * @param values  The actual values of this {@link ConfFileValueV2}. If a not
+	 *                initialized array is parsed as parameter it will be changed to
+	 *                an array with a single value, that being '<code>null</code>'.
 	 */
 	public ConfFileValueV2(final String key, final String comment, final String... values)
 	{
 		this.key = key;
 		if (values == null)
 			this.values = new String[]
-			{ "" };
+			{ "null" };
 		else
 			this.values = values;
 		this.comment = comment;
-
-		for (int i = 0; i < this.values.length; i++)
-			this.values[i] = replaceEscapeMarkers(this.values[i]);
 	}
 
 	@Override
@@ -56,7 +55,7 @@ public class ConfFileValueV2
 	 */
 	public String toString()
 	{
-		return this.key + ": " + Arrays.toString(this.values);
+		return this.key + ": " + Arrays.toString(this.values) + " | " + this.comment;
 	}
 
 	/**
@@ -69,12 +68,14 @@ public class ConfFileValueV2
 	 * @return the whole {@link #values} array. If {@link #isArrayValue()} returns
 	 *         false, you can just use the {@link #getValue()} method to simplify
 	 *         the process.
+	 * @see #replaceEscapeMarkers(String)
 	 */
 	public String[] getValues()
 	{ return this.values; }
 
 	/**
 	 * @return the first value of the {@link #values} array.
+	 * @see #replaceEscapeMarkers(String)
 	 */
 	public String getValue()
 	{ return this.values[0]; }
@@ -129,22 +130,19 @@ public class ConfFileValueV2
 
 	public static String replaceEscapeMarkers(String in)
 	{
-		String out = in;
+		String out = in == null ? "" : in;
 		for (String c : SPECIAL_CHARACTERS)
-			out = in.replace("\\" + String.valueOf(c), String.valueOf(c));
+			out = out.replace("\\" + String.valueOf(c), String.valueOf(c));
 
-//		System.out.println("C: " + out.contains("\\["));
 		return out;
 	}
 
 	public static String insertEscapeMarkers(String in)
 	{
-		String out = in;
+		String out = in == null ? "" : in;
 		for (String c : SPECIAL_CHARACTERS)
-			out = in.replace(String.valueOf(c), "\\" + String.valueOf(c));
+			out = out.replace(String.valueOf(c), "\\" + String.valueOf(c));
 
-//		out = in.replace("\\", "\\\\");
-//		System.out.println(in + " | " + out + " || " + in.contains("["));
 		return out;
 	}
 

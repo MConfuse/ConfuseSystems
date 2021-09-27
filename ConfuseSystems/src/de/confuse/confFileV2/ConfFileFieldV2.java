@@ -112,7 +112,7 @@ public class ConfFileFieldV2
 	 * @param key The key (name) to search for.
 	 * @return The first matching {@link ConfFileValueV2} or null
 	 */
-	public ConfFileValueV2 getValueRaw(String key)
+	public ConfFileValueV2 getValueObject(String key)
 	{
 		for (ConfFileValueV2 val : this.values)
 			if (val.getKey().equals(key))

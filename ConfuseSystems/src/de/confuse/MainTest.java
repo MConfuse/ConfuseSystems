@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import de.confuse.confFileV1.ConfFileField;
+import de.confuse.confFileV2.ConfFileFieldV2;
 import de.confuse.confFileV2.ConfFileReaderV2;
 import de.confuse.confFileV2.ConfFileValueV2;
 import de.confuse.confFileV2.ConfFileWriterV2;
@@ -25,21 +26,35 @@ public class MainTest
 
 	public static void main(String[] args)
 	{
-		String pathname = "testWrite.conff";
+		String pathname = "test.conff";
 //		String pathname = "C:/Users/MrCon/git/ConfuseSystems/ConfuseSystems/test.conff";
 		File file = new File(pathname);
+		File write = new File("testWrite.conff");
+		File write2 = new File("testWrite2.conff");
 
-		try
-		{
-			ConfFileReaderV2 reader = new ConfFileReaderV2(file);
+//		try
+//		{
+			ConfFileReaderV2 r = new ConfFileReaderV2("Field: inline {(inlineNormal: \"yikes\" # Test), (inlineBetter: \"guht\"), (inlineBest: \"klaus\"), (inlineTEST: \"YAYEEEEEEEEET\"), (inlineArray [\"1\", \"2\", \"3\"] # Test), (StringOne: \"This is a handy \\\"Test\\\" String which has \\[lots\\] of \\{stuffs\\} in it! \\(Also, it looks amazing!\\).\")}");
+			r.printFieldsAndValues();
+//			ConfFileReaderV2 reader = new ConfFileReaderV2(file);
 
-			ConfFileWriterV2 writer = new ConfFileWriterV2(new File("testWrite2.conff"));
-			writer.addFields(reader.getFields());
-			writer.writeFile();
-		}
-		catch (IOException e)
+//			ConfFileFieldV2 field = new ConfFileFieldV2("testStrings", false);
+//			field.put("String One", "This is a handy \"Test\" String which has [lots] of {stuffs} in it! (Also, it looks amazing!).");
+
+//			ConfFileWriterV2 writer = new ConfFileWriterV2(write);
+//			writer.addFields(reader.getFields());
+//			writer.addField(field);
+//			writer.writeFile();
+
+//			ConfFileReaderV2 reader = new ConfFileReaderV2(write2);
+//			reader.getFields().forEach(e ->
+//			{
+//				System.out.println(e.getName() + ": " + Arrays.toString(e.getValues().toArray()));
+//			});
+//		}
+//		catch (IOException e)
 		{
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 //		try
 //		{

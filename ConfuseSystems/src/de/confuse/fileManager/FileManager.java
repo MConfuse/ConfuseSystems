@@ -9,11 +9,12 @@ import java.util.concurrent.CompletableFuture;
 /**
  * A File Manager used to easily access and save Files!
  * 
- * @version 1.4
+ * @version 1.5
  * @author Confuse/Confuse#5117
- * https://github.com/MConfuse/FileManagerAPI
+ *         https://github.com/MConfuse/ConfuseSystems
  */
-public class FileManager {
+public class FileManager
+{
 
 	public static final String FILE_TYPE = ".cfg";
 	private final String version = "v1.4";
@@ -196,7 +197,7 @@ public class FileManager {
 				{
 					e.printStackTrace();
 				}
-				
+
 			}
 
 		}
@@ -223,9 +224,7 @@ public class FileManager {
 	 * @return List {@link File}
 	 */
 	public List<File> getDirectories()
-	{
-		return directories;
-	}
+	{ return directories; }
 
 	/**
 	 * Returns the directory with the specific name. Only works for directories
@@ -241,19 +240,6 @@ public class FileManager {
 				return file;
 
 		return null;
-	}
-
-	/**
-	 * Returns the directory with the position in the List. Only works for
-	 * directories added with the {@link #addDirectories(File...)} method!
-	 * 
-	 * @param index Position of the File in the List. (Should be the order they were
-	 *              added in).
-	 * @return {@link File} | null
-	 */
-	public File getDirectory(int index)
-	{
-		return directories.get(index);
 	}
 
 	/**
@@ -294,16 +280,14 @@ public class FileManager {
 	 * @return List {@link CustomFile}
 	 */
 	public List<CustomFile> getCustomFiles()
-	{
-		return files;
-	}
+	{ return files; }
 
 	/**
 	 * Searches for a File in a specific location. Returns a List containing all the
 	 * Files containing the name (Ignoring capitalization).
 	 * 
 	 * @param filePath Path to the directory.
-	 * @param name String that the Filename has to contain.
+	 * @param name     String that the Filename has to contain.
 	 * @return List {@link File}
 	 */
 	public List<File> getFiles(String filePath, String name)
@@ -312,7 +296,7 @@ public class FileManager {
 		File[] folderFiles = new File(filePath).listFiles();
 		List<File> files = new ArrayList<File>();
 		name = name.toLowerCase();
-		
+
 		for (File file : folderFiles)
 			if (file.getName().toLowerCase().contains(name))
 				files.add(file);
@@ -346,7 +330,7 @@ public class FileManager {
 	 * (Ignoring capitalization).
 	 * 
 	 * @param filePath Path to the directory.
-	 * @param name The Files name.
+	 * @param name     The Files name.
 	 * @return File | null
 	 */
 	public File getFile(String filePath, String name)

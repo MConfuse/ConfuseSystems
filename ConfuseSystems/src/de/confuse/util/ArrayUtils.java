@@ -2,7 +2,6 @@ package de.confuse.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -75,6 +74,27 @@ public class ArrayUtils
 		newArr[arr.length] = element;
 
 		return newArr;
+	}
+
+	/**
+	 * Casts the given Array from one type of another.<br>
+	 * <br>
+	 * <strong>NOTE:</strong><br>
+	 * The casting is unchecked and may fail at any time!
+	 * 
+	 * @param <T> The type of array to cast to
+	 * @param <A> The type of array to cast from
+	 * @param target The target array
+	 * @param array The array to cast
+	 * @return the casted array
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T, A> T[] castArray(T[] target, A[] array)
+	{
+		for (int i = 0; i < array.length; i++)
+			target[i] = (T) array[i];
+
+		return target;
 	}
 
 	/**

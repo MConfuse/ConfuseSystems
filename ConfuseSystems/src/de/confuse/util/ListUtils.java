@@ -19,4 +19,19 @@ public class ListUtils
 		return out;
 	}
 
+	/**
+	 * Does what the name suggests
+	 * 
+	 * @param list The list to convert
+	 * @return a new Array identical to the list.
+	 */
+	public static Object[] objectListToArray(List<?> list)
+	{
+		Object[] out = new Object[list.size()];
+		for (int i = 0; i < out.length; i++)
+			out[i] = list.get(i);
+		
+		return out;
+	}
+
 }
